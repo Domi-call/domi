@@ -1,0 +1,13 @@
+db:
+  user: "root"
+  password: "dbcloud123"
+  host: "192.168.2.243"
+  port: 3306
+  dbname: "filebrowser"
+  charset: "utf8mb4"
+  parseTime: true
+  loc: "Local"
+  maxIdleConns: 10
+  maxOpenConns: 20
+  connMaxLifetime: "1h"
+  logLevel: "info"

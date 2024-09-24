@@ -1,0 +1,43 @@
+package importer
+
+import (
+	"github.com/asdine/storm/v3"
+	"github.com/filebrowser/filebrowser/v2/storage/mysql"
+
+	"github.com/filebrowser/filebrowser/v2/storage/bolt"
+)
+
+// Import imports an old configuration to a newer database.
+func Import(oldDBPath, oldConf, newDBPath string) error {
+	oldDB, err := storm.Open(oldDBPath)
+	if err != nil {
+		return err
+	}
+	defer oldDB.Close()
+
+	//newDB, err := storm.Open(newDBPath)
+	//if err != nil {
+	//	return err
+	//}
+	//defer newDB.Close()
+
+	mysql.InitDB(newDBPath)
+
+	//sto, err := bolt.NewStorage(newDB)
+	sto, err := bolt.NewStorage(mysql.DB)
+	if err != nil {
+		return err
+	}
+
+	err = importUsers(oldDB, sto)
+	if err != nil {
+		return err
+	}
+
+	err = importConf(oldDB, oldConf, sto)
+	if err != nil {
+		return err
+	}
+
+	return err
+}
